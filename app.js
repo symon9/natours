@@ -27,9 +27,9 @@ app.get('/api/v1/tours', (req, res) => {
 
 app.get('/api/v1/tours/:id', (req, res) => {
   console.log(req.params);
-  //const id = req.params.id * 1;
+  const id = req.params.id * 1;
 
-  const tour = tours.find((el) => el.id === parseInt(req.params));
+  const tour = tours.find((el) => el.id === id);
   //if (id > tours.length)
   if (!tour) {
     return res.status(404).json({
@@ -37,7 +37,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
       massage: 'Invalid ID',
     });
   }
-  
+
   res.status(200).json({
     status: 'success',
     data: {
@@ -65,6 +65,22 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
+});
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      massage: 'Invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated tour here...>',
+    },
+  });
 });
 
 //This is how we send different responses for different http methods request
