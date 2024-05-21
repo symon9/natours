@@ -9,6 +9,7 @@ const app = express();
 // 1) MIDDLEWARES STACK FOR ALL ROUTES
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
   console.log('Hello from middle');
