@@ -6,7 +6,7 @@ const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
-// 1) MIDDLEWARES
+// 1) MIDDLEWARES STACK FOR ALL ROUTES
 app.use(morgan('dev'));
 app.use(express.json());
 
