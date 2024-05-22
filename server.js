@@ -1,4 +1,3 @@
-// TODO: npm i dotenv
 const dotenv = require('dotenv');
 dotenv.config({
   path: './config.env',
