@@ -3,19 +3,27 @@ const Tour = require('./../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD THE QUERY
-    // 1) Filtering
+    // 1A) Filtering
     // Build the query object by filtering out unwanted fields from the request query
     const queryObj = { ...req.query };
     const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    // 2) Advanced Filtering
+    // 1B) Advanced Filtering
     // Convert the query object to a JSON string and replace operators with MongoDB syntax
     let queryStr = JSON.stringify(queryObj); //js obj to json string
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
     console.log(JSON.parse(queryStr));
 
-    const query = await Tour.find(JSON.parse(queryStr)); // json string to js object
+    let query = Tour.find(JSON.parse(queryStr)); // json string to js object
+
+    // 2) Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' '); // This is to handle multiple sort fields, e.g. 'name,-price'
+      query = query.sort(sortBy); // Apply the sorting to the query
+    } else {
+      query = query.sort('-createdAt');
+    }
 
     // EXECUTE THE QUERY
     const tours = await query;
