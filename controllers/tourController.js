@@ -3,22 +3,28 @@ const Tour = require('./../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD THE QUERY
+    // 1) Filtering
+    // Build the query object by filtering out unwanted fields from the request query
     const queryObj = { ...req.query };
     const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    console.log(req.query, queryObj);
+    // 2) Advanced Filtering
+    // Convert the query object to a JSON string and replace operators with MongoDB syntax
+    let queryStr = JSON.stringify(queryObj); //js obj to json string
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    console.log(JSON.parse(queryStr));
 
-    const query = await Tour.find(queryObj);
+    const query = await Tour.find(JSON.parse(queryStr)); // json string to js object
+
+    // EXECUTE THE QUERY
+    const tours = await query;
 
     // const query = await Tour.find()
     //   .where('duration')
     //   .equals(5)
     //   .where('difficulty')
     //   .equals('easy');
-
-    // EXECUTE THE QUERY
-    const tours = await query;
 
     // SEND RESPONSE
     res.status(200).json({
