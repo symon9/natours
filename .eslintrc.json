@@ -3,6 +3,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "off",
+    "no-useless-path-segments": "on",
     "spaced-comment": "off",
     "no-console": "off",
     "consistent-return": "off",
