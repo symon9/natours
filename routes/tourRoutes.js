@@ -1,4 +1,3 @@
-/* eslint-disable import/no-useless-path-segments */
 const express = require('express');
 const tourController = require('./../controllers/tourController'); // we can also just destructure it.
 
