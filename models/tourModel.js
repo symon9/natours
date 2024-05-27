@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const slugify = require('slugify'); // TODO: npm i slugify
+const slugify = require('slugify');
 
 const tourSchema = new mongoose.Schema(
   {
