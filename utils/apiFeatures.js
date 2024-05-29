@@ -14,7 +14,6 @@ class APIFeatures {
     // Convert the query object to a JSON string and replace operators with MongoDB syntax
     let queryStr = JSON.stringify(queryObj); //js obj to json string
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    console.log(JSON.parse(queryStr));
 
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
