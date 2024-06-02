@@ -57,6 +57,12 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userStoredPassword,
@@ -67,7 +73,7 @@ userSchema.methods.correctPassword = async function (
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     console.log(JWTTimestamp);
-    console.log('Hii');
+    
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
       10,
