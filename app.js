@@ -2,13 +2,15 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
+const mongoSanitize = require('express-mongo-sanitize'); // TODO: npm i express-mongo-sanitize
+const xss = require('xss-clean'); // TODO: npm i xss-clean
+const hpp = require('hpp'); // TODO: npm i hpp
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const { whitelist } = require('validator');
 
 const app = express();
 
@@ -32,11 +34,25 @@ app.use('/api', limiter);
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 
-// Prevent against NoSql query injection
+// Data sanitization against NoSql query injection
 app.use(mongoSanitize());
 
-// Prevent against xss
+// Data sanitization against XSS
 app.use(xss());
+
+// Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  }),
+);
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
