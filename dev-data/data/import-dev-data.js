@@ -21,9 +21,7 @@ mongoose
   .then(() => console.log('DB connection successfully'));
 
 //READ JSON FILE
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'),
-);
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 //IMPORT DATA TO DATABASE
 const importData = async () => {
@@ -52,3 +50,5 @@ if (process.argv[2] === '--import') {
 } else if (process.argv[2] === '--delete') {
   deleteData();
 }
+
+// TODO: node ... -delete and import again
