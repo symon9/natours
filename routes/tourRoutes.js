@@ -1,12 +1,17 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController'); // we can also just destructure it.
 const authController = require('./../controllers/authController');
-const reviewsController = require('../controllers/reviewController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router(); //create the router
 
 // MIDDLEWARE STACK FOR TOUR ROUTES IF THERE IS AN ID
 //router.param('id', tourController.checkID);
+
+// GET /tour/345s78fci/reviews
+// GET /tour/345s78fci/reviews/8f8h9826528
+
+router.use('/:tourId/reviews', reviewRouter);
 
 router
   .route('/top-5-cheap')
@@ -28,18 +33,6 @@ router
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour,
-  );
-
-// POST /tour/345s78fci/reviews
-// GET /tour/345s78fci/reviews
-// GET /tour/345s78fci/reviews/8f8h9826528
-
-router
-  .route('/:tourId/reviews')
-  .post(
-    authController.protect,
-    authController.restrictTo('user'),
-    reviewsController.createReviews,
   );
 
 module.exports = router;
