@@ -4,6 +4,7 @@ const reviewSchema = new mongoose.Schema(
   {
     review: {
       type: String,
+      required: [true, 'Review can not be empty'],
     },
     rating: {
       type: Number,
@@ -35,6 +36,6 @@ const reviewSchema = new mongoose.Schema(
   },
 );
 
-const Reviews = mongoose.model('Reviews', reviewSchema);
+const Review = mongoose.model('Review', reviewSchema);
 
-module.exports = Reviews;
+module.exports = Review;
