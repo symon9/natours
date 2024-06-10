@@ -10,7 +10,7 @@ router.post('/login', authController.login);
 router.patch('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
-app.use(authController.protect); // Protect all routes after this middleware
+router.use(authController.protect); // Protect all routes after this middleware
 
 router.patch('/updateMyPassword', authController.updatePassword);
 
