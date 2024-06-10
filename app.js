@@ -2,9 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize'); // TODO: npm i express-mongo-sanitize
-const xss = require('xss-clean'); // TODO: npm i xss-clean
-const hpp = require('hpp'); // TODO: npm i hpp
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
