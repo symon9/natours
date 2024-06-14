@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser') // TODO: npm i cookie-parser 
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,6 +26,14 @@ app.use(express.static(`${__dirname}/public`));
 
 // Set security HTTP headers
 app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://api.mapbox.com"],
+        styleSrc: ["'self'", "https://fonts.googleapis.com", "https://api.mapbox.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"]
+    }
+}));
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -41,6 +50,7 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // Data sanitization against NoSql query injection
 app.use(mongoSanitize());
@@ -65,7 +75,7 @@ app.use(
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  //console.log(req.headers)
+  console.log(req.cookies)
   next();
 });
 
