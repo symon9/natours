@@ -1,10 +1,12 @@
 /* eslint-disable */
-import { login } from './login';
+import '@babel/polyfill';
+import { login, logout } from './login';
 import { displayMap } from './mapbox';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form');
+const logoutBtn = document.querySelector('.nav__el--logout');
 
 // DELEGATION
 if (mapBox) {
@@ -20,4 +22,4 @@ if (loginForm)
     login(email, password);
   });
 
-// TODO: i parcel-bundler@1 cookie-parser axios @babel/polyfill
+if (logoutBtn) logoutBtn.addEventListener('click', logout);
