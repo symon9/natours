@@ -1,7 +1,35 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerController');
 const AppError = require('../utils/AppError');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('/image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+//upload.single('image') // req.file
+//upload.array('images', 5) // req.files
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  next();
+});
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -103,24 +131,23 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     next(
       new AppError(
         'Please provide latitude and longitude in the format lat,lng.',
-        400
-      )
+        400,
+      ),
     );
   }
 
   const tours = await Tour.find({
-    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
 
   res.status(200).json({
     status: 'success',
     results: tours.length,
     data: {
-      data: tours
-    }
+      data: tours,
+    },
   });
 });
-
 
 exports.getDistances = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
@@ -132,8 +159,8 @@ exports.getDistances = catchAsync(async (req, res, next) => {
     next(
       new AppError(
         'Please provide latitude and longitude in the format lat,lng.',
-        400
-      )
+        400,
+      ),
     );
   }
 
@@ -142,24 +169,24 @@ exports.getDistances = catchAsync(async (req, res, next) => {
       $geoNear: {
         near: {
           type: 'Point',
-          coordinates: [lng * 1, lat * 1]
+          coordinates: [lng * 1, lat * 1],
         },
         distanceField: 'distance',
-        distanceMultiplier: multiplier
-      }
+        distanceMultiplier: multiplier,
+      },
     },
     {
       $project: {
         distance: 1,
-        name: 1
-      }
-    }
+        name: 1,
+      },
+    },
   ]);
 
   res.status(200).json({
     status: 'success',
     data: {
-      data: distances
-    }
+      data: distances,
+    },
   });
 });
