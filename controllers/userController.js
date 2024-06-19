@@ -1,5 +1,5 @@
 const multer = require('multer');
-const sharp = require('sharp'); // TODO: npm i sharp
+const sharp = require('sharp');
 const User = require('../models/userModel');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
