@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from 'axios';
 import { showAlert } from './alerts';
-const stripe = Stripe('pk_test_BUkd0ZXAj6m0q0jMyRgBxNns00PPtgvjjr'); // TODO: add ur public key
+const stripe = Stripe('pk_test_51PUCXz07xpM40YViFk11J3qrpJNeVRDsvam9gZXdR3iDfhRTseID0EKW7iI4uDIcWrgxqzeQJekY8nHet97GlZsQ00M7Q4OVGW');
 
 export const bookTour = async (tourId) => {
   try {
